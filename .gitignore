@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+venv/
+habits.db
+*.db
+.DS_Store
+screenshots/
