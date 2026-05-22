@@ -58,7 +58,7 @@ def test_habit_validation_empty_name():
 def test_habit_validation_wrong_periodicity():
     """Test that wrong periodicity type raises ValueError."""
     with pytest.raises(ValueError, match="periodicity must be a Periodicity enum"):
-        Habit(name="Swim", periodicity="daily")  # string instead of Enum
+        Habit(name="Swim", periodicity="daily")  # string instead of Enum, # type: ignore[arg-type]
 
 
 # Optional: Run this test file directly
