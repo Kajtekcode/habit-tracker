@@ -1,57 +1,67 @@
-"""Seed module - Creates predefined habits and sample data (4 weeks).
-
-This fulfills the assignment requirement for test fixture data.
-"""
+"""Seed module - Creates predefined habits and sample data (4 weeks)."""
 
 from datetime import datetime, timedelta
 from models import Periodicity
 from services import HabitService
+from database import get_db_connection
 
 
 def seed_sample_data() -> None:
     """Create 5 predefined habits with 4 weeks of realistic sample data."""
     service = HabitService()
 
-    # Clear existing data first
     print("🧹 Clearing existing data...")
+    # Clear database first
+    with get_db_connection() as conn:
+        conn.execute("DELETE FROM completions")
+        conn.execute("DELETE FROM habits")
+        conn.commit()
 
-    # 1. Daily habits
+    print("🌱 Seeding new sample data...")
+
+    # Create habits
     drink_water = service.create_habit("Drink water", Periodicity.DAILY)
     exercise = service.create_habit("Exercise", Periodicity.DAILY)
-    
-    # 2. Weekly habits
     clean_house = service.create_habit("Clean the house", Periodicity.WEEKLY)
     groceries = service.create_habit("Do grocery shopping", Periodicity.WEEKLY)
     read_book = service.create_habit("Read 30 minutes", Periodicity.DAILY)
 
-    print(f"✅ Created 5 habits: {drink_water.name}, {exercise.name}, {clean_house.name}, {groceries.name}, {read_book.name}")
+    print(f"✅ Created 5 habits: Drink water, Exercise, Clean the house, "
+          f"Do grocery shopping, Read 30 minutes")
 
-    # Add 4 weeks of sample completions (realistic patterns)
     today = datetime.now()
-    
-    # Drink water - very consistent (almost perfect streak)
-    for i in range(28):
-        if i % 7 != 3:  # miss every Sunday
-            service.complete_habit(drink_water.id, today - timedelta(days=i))  # type: ignore
 
-    # Exercise - good but with some gaps
-    for i in range(28):
-        if i % 5 != 0:  # miss every 5th day
-            service.complete_habit(exercise.id, today - timedelta(days=i))  # type: ignore
+    # === Drink water - very consistent daily ===
+    if drink_water and drink_water.id:
+        for i in range(24):                     # 24 day streak
+            past_date = today - timedelta(days=i)
+            service.complete_habit(drink_water.id, past_date)
 
-    # Clean house - weekly (completed most Saturdays)
-    for i in range(4):
-        service.complete_habit(clean_house.id, today - timedelta(weeks=i))  # type: ignore
+    # === Exercise - good but with some gaps ===
+    if exercise and exercise.id:
+        for i in range(22):
+            past_date = today - timedelta(days=i)
+            service.complete_habit(exercise.id, past_date)
 
-    # Grocery shopping - weekly
-    for i in range(4):
-        service.complete_habit(groceries.id, today - timedelta(weeks=i, days=1))  # type: ignore
+    # === Clean house - weekly ===
+    if clean_house and clean_house.id:
+        for i in range(4):
+            past_date = today - timedelta(weeks=i)
+            service.complete_habit(clean_house.id, past_date)
 
-    # Read book - very consistent daily
-    for i in range(28):
-        service.complete_habit(read_book.id, today - timedelta(days=i))  # type: ignore
+    # === Grocery shopping - weekly ===
+    if groceries and groceries.id:
+        for i in range(4):
+            past_date = today - timedelta(weeks=i)
+            service.complete_habit(groceries.id, past_date)
 
-    print("✅ Successfully seeded 5 habits with 4 weeks of sample data!")
+    # === Read 30 minutes - very consistent ===
+    if read_book and read_book.id:
+        for i in range(28):                     # 28 day streak
+            past_date = today - timedelta(days=i)
+            service.complete_habit(read_book.id, past_date)
+
+    print("✅ Successfully seeded 5 habits with 4 weeks of realistic consecutive data!")
 
 
 if __name__ == "__main__":

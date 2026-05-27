@@ -6,6 +6,7 @@ It contains the main operations users can perform.
 
 from datetime import datetime
 from typing import List
+import sqlite3   # ← Add this line
 
 from models import Habit, Periodicity
 from repository import HabitRepository
@@ -18,10 +19,16 @@ class HabitService:
         """Initialize the service with a repository."""
         self.repo = HabitRepository()
 
-    def create_habit(self, name: str, periodicity: Periodicity) -> Habit:
-        """Create a new habit and save it to the database."""
-        habit = Habit(name=name, periodicity=periodicity)
-        return self.repo.add_habit(habit)
+    def create_habit(self, name: str, periodicity: Periodicity) -> Habit | None:
+        """Create a new habit and save it to the database.
+        Returns None if a habit with the same name already exists.
+        """
+        try:
+            habit = Habit(name=name, periodicity=periodicity)
+            return self.repo.add_habit(habit)
+        except sqlite3.IntegrityError:
+            print(f"❌ A habit with the name '{name}' already exists!")
+            return None
 
     def complete_habit(self, habit_id: int, timestamp: datetime | None = None) -> bool:
         """Mark a habit as completed at the given time (or now)."""

@@ -12,7 +12,7 @@ def service():
     """Create a fresh HabitService for each test."""
     service = HabitService()
     # Clean database before each test
-    with get_db_connection() as conn:  # type: ignore
+    with get_db_connection() as conn:
         conn.execute("DELETE FROM completions")
         conn.execute("DELETE FROM habits")
         conn.commit()
@@ -22,7 +22,7 @@ def service():
 def test_create_habit(service: HabitService):
     """Test creating a new habit through the service."""
     habit = service.create_habit("Read book", Periodicity.DAILY)
-    
+    assert habit is not None                    # Important safety check
     assert habit.id is not None
     assert habit.name == "Read book"
     assert habit.periodicity == Periodicity.DAILY
@@ -32,8 +32,10 @@ def test_create_habit(service: HabitService):
 def test_complete_habit(service: HabitService):
     """Test completing a habit through the service."""
     habit = service.create_habit("Exercise", Periodicity.DAILY)
-    success = service.complete_habit(habit.id)  # type: ignore
+    assert habit is not None
+    assert habit.id is not None
     
+    success = service.complete_habit(habit.id)
     assert success is True
     
     habits = service.list_all_habits()
@@ -43,9 +45,10 @@ def test_complete_habit(service: HabitService):
 def test_delete_habit(service: HabitService):
     """Test deleting a habit through the service."""
     habit = service.create_habit("Meditate", Periodicity.WEEKLY)
-    habit_id = int(habit.id)  # type: ignore
+    assert habit is not None
+    assert habit.id is not None
     
-    success = service.delete_habit(habit_id)
+    success = service.delete_habit(habit.id)
     assert success is True
     
     assert len(service.list_all_habits()) == 0
@@ -66,7 +69,7 @@ def test_list_habits_by_periodicity(service: HabitService):
 
 def test_complete_nonexistent_habit(service: HabitService):
     """Test trying to complete a habit that doesn't exist."""
-    success = service.complete_habit(9999)  # non-existent ID
+    success = service.complete_habit(9999)
     assert success is False
 
 

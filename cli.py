@@ -61,21 +61,30 @@ def main():
             p_choice = input("Choose periodicity (1/2): ").strip()
             periodicity = Periodicity.DAILY if p_choice == "1" else Periodicity.WEEKLY
             habit = service.create_habit(name, periodicity)
-            print(f"✅ Habit '{habit.name}' created successfully!")
+            if habit:
+                print(f"✅ Habit '{habit.name}' created successfully!")
+            # else: error message is already printed in service
 
         elif choice == "5":
             habits = service.list_all_habits()
             if not habits:
                 print("❌ No habits found!")
                 continue
+            
             for i, h in enumerate(habits, 1):
                 print(f"{i}. {h.name} ({h.periodicity.value})")
+            
             try:
                 idx = int(input("Choose habit number to complete: ")) - 1
-                habit_id = habits[idx].id
-                success = service.complete_habit(habit_id)
+                selected_habit = habits[idx]
+                
+                if selected_habit.id is None:
+                    print("❌ Error: Habit has no ID!")
+                    continue
+                
+                success = service.complete_habit(selected_habit.id)
                 print("✅ Habit completed!" if success else "❌ Failed to complete habit.")
-            except:
+            except (ValueError, IndexError):
                 print("❌ Invalid choice!")
 
         elif choice == "6":
@@ -83,16 +92,23 @@ def main():
             if not habits:
                 print("❌ No habits found!")
                 continue
+            
             for i, h in enumerate(habits, 1):
                 print(f"{i}. {h.name}")
+            
             try:
                 idx = int(input("Choose habit number to delete: ")) - 1
-                habit_id = habits[idx].id
-                if service.delete_habit(habit_id):
+                selected_habit = habits[idx]
+                
+                if selected_habit.id is None:
+                    print("❌ Error: Habit has no ID!")
+                    continue
+                
+                if service.delete_habit(selected_habit.id):
                     print("✅ Habit deleted!")
                 else:
                     print("❌ Failed to delete habit.")
-            except:
+            except (ValueError, IndexError):
                 print("❌ Invalid choice!")
 
         elif choice == "7":
