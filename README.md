@@ -19,20 +19,20 @@ A clean, maintainable Habit Tracking Application built in Python as part of the 
 - dataclasses, Enum, type hints
 - pytest (for testing)
 
-## Project Structure
+## Project Structure g
 
-habit_tracker/
-├── main.py                 # Application entry point
-├── cli.py                  # Command Line Interface
-├── services.py             # Business Logic Layer
-├── repository.py           # Data Access Layer (Repository Pattern)
-├── database.py             # SQLite database setup
-├── models.py               # Domain Model (Habit class)
-├── analytics.py            # Pure Functional Analytics
-├── seed.py                 # Test fixture with sample data
-├── tests/                  # Unit tests
-├── requirements.txt
-└── habits.db               # Database file (auto-generated)
+* habit_tracker/  <br>
+* ├── main.py                   # Application entry point. <br>
+* ├── cli.py                    # Command Line Interface. <br>
+* ├── services.py               # Business Logic Layer. <br>
+* ├── repository.py             # Data Access Layer (Repository Pattern). <br>
+* ├── database.py               # SQLite database setup. <br>
+* ├── models.py                 # Domain Model (Habit class). <br>
+* ├── analytics.py              # Pure Functional Analytics. <br>
+* ├── seed.py                   # Test fixture with sample data. <br>
+* ├── tests/                    # Unit tests. <br>
+* ├── requirements.txt  <br>
+* └── habits.db.                # Database file (auto-generated). <br>
 
 
 ## Installation & Setup
