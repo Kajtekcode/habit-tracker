@@ -37,18 +37,18 @@ A clean, maintainable Habit Tracking Application built in Python as part of the 
 
 ## Installation & Setup
 
-1. **Clone the repository**
-   git clone https://github.com/Kajtekcode/habit-tracker.git
+1. **Clone the repository**<br>
+   git clone https://github.com/Kajtekcode/habit-tracker.git<br>
    cd habit-tracker
 
-2. **Create and activate virtual environment
-python3 -m venv venv
+2. **Create and activate virtual environment<br>
+python3 -m venv venv<br>
 source venv/bin/activate    # On Windows: venv\Scripts\activate
 
-3. Install dependencies
+3. Install dependencies<br>
 pip install -r requirements.txt
 
-4. Run the application
+4. Run the application<br>
 python main.py
 
 ## How to Use
@@ -64,12 +64,12 @@ After starting the app, you will see a menu with the following options:
 8. Exit
 
 ## Seeding Sample Data
-To load the 5 predefined habits with 4 weeks of sample data:
+To load the 5 predefined habits with 4 weeks of sample data: <br>
 python seed.py
 
 ## Running Tests
-**Run all tests
+**Run all tests<br>
 pytest tests/ -v
 
-**Run specific test file
+**Run specific test file<br>
 pytest tests/test_models.py -v
